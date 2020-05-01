@@ -4,6 +4,7 @@ import Base.UiBaseTest;
 import Enums.CurrencyEnum;
 import Enums.ImportanceEnum;
 import Pages.CalendarPage.CalendarPage;
+import Pages.CalendarPage.EventsTableRowComponent;
 import Pages.EventPage.HistoryTableRowComponent;
 import RestServices.LstToApiService;
 import Utils.HistoryTablePrinter;
@@ -13,6 +14,7 @@ import org.testng.annotations.Test;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Optional;
 
 import static Utils.Log.getLogger;
 import static Utils.TestUtils.getCurrentPageLink;
@@ -45,7 +47,7 @@ public class T1_CalendarFilter extends UiBaseTest {
                 .getParent()
                 .waitForResultsTableToBeUpdated(2000)
                 .getEventsTable()
-                .getEvents().stream().filter(event -> event.getCurrency() == CURRENCY_TO_FILTER_BY).findFirst().orElse(null)
+                .getEvents().stream().filter(event -> event.getCurrency() == CURRENCY_TO_FILTER_BY).findFirst().orElseThrow(() -> new RuntimeException("No events for "+CURRENCY_TO_FILTER_BY.getCode()+" currency found in table."))
                 .openEvent()
                 .checkImportanceValue(IMPORTANCE_TO_FILTER_BY)
                 .checkCountryValue(CURRENCY_TO_FILTER_BY.getCountry())
